@@ -87,26 +87,6 @@ namespace Angular2SPAWebAPI
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // Router on the server must match the router on the client (see app.routing.ts) to use PathLocationStrategy.
-            var appRoutes = new[] {
-                 "/home",
-                 "/resources",
-                 "/dashboard",
-                 "/resources",
-                 "/signin",
-                 "/signup"
-             };
-
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.Path.HasValue && appRoutes.Contains(context.Request.Path.Value))
-                {
-                    context.Request.Path = new PathString("/");
-                }
-
-                await next();
-            });
-
             // IdentityServer4.AccessTokenValidation: authentication middleware for the API.
             app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
             {
@@ -122,8 +102,6 @@ namespace Angular2SPAWebAPI
             // Microsoft.AspNetCore.StaticFiles: API for starting the application from wwwroot.
             // Uses default files as index.html.
             app.UseDefaultFiles();
-            // Uses static file for the current path.
-            app.UseStaticFiles();
 
             // Adds Identity.
             app.UseIdentity();
